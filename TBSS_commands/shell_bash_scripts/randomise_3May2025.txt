@@ -1,0 +1,24 @@
+##
+#FSL
+# Group Level (Second Level) Analysis
+## randomise options in FSL version 6.0.3
+## 10000 permutation + with uncorrected p_images + with ClusterSize correction (Cluster forming T-threshold=3.1) + with raw T_stat_images + verbose + with GLM Outputs(Sigma values)
+## Covariates/Variables were demeaned before Glm 
+
+cd /path/to/stats/folder
+
+# for FA (for MD use 'all_MD_skeletonised.nii.gz' input)
+# using parallel processing 
+randomise_parallel -i /path/to/all_FA_skeletonised.nii.gz -o /path/to/output/tbss_IndependenVariable -m /path/to/mean_FA_skeleton_mask.nii.gz -d /path/to/design.mat -t /path/to/design.con -n 10000 --uncorrp -c 3.1 -R -V --glm_output=Glm
+
+## if there is a significant result
+# tbss_fill in FSL version 6.0.3
+
+# tbss_fill for 'tbss_clustere_corrp_tstat1.nii.gz' or 'tbss_clustere_corrp_tstat2.nii.gz' result images 
+tbss_fill tbss_clustere_corrp_tstat1.nii.gz 0.95 /path/to/mean_FA.nii.gz Filled_tbss_clustere_corrp_tstat1.nii.gz
+#
+
+
+
+
+

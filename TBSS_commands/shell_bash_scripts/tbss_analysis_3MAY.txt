@@ -1,0 +1,85 @@
+------------------------------------------------------------------------
+## TBSS whole brain 
+# the data was already preprocessed for previous studies within the LIFE-Adult-Study
+# see the publications below
+# Zhang et al., 2018 ( https://doi.org/10.1016/j.neuroimage.2018.01.028 )
+# Thomas et al., 2019 ( https://doi.org/10.1038/s41598-019-53578-4 )
+------------------------------------------------------------------------
+# steps
+#tbss_1_preproc 
+# skipped, "_FA" extension added to the files (FA and origdata folders)
+# Because the data was already preprocessed within the LIFE-Adult-Study
+#
+#tbss_2_reg -t
+#used atlas as a target in tbss_reg step
+$FSLDIR/data/standard/FSL_HCP1065_FA_1mm.nii.gz
+
+tbss_2_reg -t $FSLDIR/data/standard/FSL_HCP1065_FA_1mm.nii.gz
+#
+tbss_3_postreg -S
+#
+#check registration outputs
+slicesdir *FA_to_target.nii.gz
+#
+#check mean FA skeleton on fsleyes from /stats/folder
+#
+#fourth TBSS command
+tbss_4_prestats 0.2
+# 0.2 is the choosen threshold, you can adjust if needed
+#
+------------------------------------------------------------------------
+##
+## Converting from/to 4D to/from 3D NIFTI images
+# FSL
+
+fslsplit all_FA_skeletonised.nii.gz 
+
+#exclude the subjects with problematic images  
+#after that:
+
+fslmerge -t all_FA_skeletonised.nii.gz $imglob vol*
+
+# check the images with fsleyes
+#
+------------------------------------------------------------------------
+#
+## PREPARING OWN DESIGN MATRIX AND CONTRAST FILES FOR LARGE DATASETS
+
+#save related data as tab delimited text file and name it "design.txt", then (with FSL):
+
+# for design.mat 
+Text2Vest design.txt design.mat
+
+# write contrasts to "contrasts.txt", then (with FSL):
+# for design.con 
+Text2Vest contrasts.txt design.con
+#
+------------------------------------------------------------------------
+###
+## analyze NON-FA, here, MD IMAGES
+
+#copy MD data with exactly the same names with the FA data but in a separate MD folder.
+#Then run in the TBSS folder containing FA, stats, orig data and MD folders.
+
+tbss_non_FA MD
+#
+------------------------------------------------------------------------
+#
+## OVERLAPPING EVALUATION  
+# (masking and then multiplzing the images that woould be seacrhed for a conjunction
+
+# first, masking (related significant maps)
+fslmaths tbss_RNFLT_clustere_corrp_tstat1.nii.gz -thr 0.945 -bin tbss_RNFLT_clustere_corrp_tstat1_MASK
+fslmaths tbss_CVRF_clustere_corrp_tstat2.nii.gz -thr 0.945 -bin tbss_CVRF_clustere_corrp_tstat2_MASK
+
+# second multiplying (related significant maps)
+fslmaths $origdir/tbss_RNFLT_clustere_corrp_tstat1_MASK.nii.gz -mul $origdir/tbss_CVRF_clustere_corrp_tstat2_MASK.nii.gz $resultsdir/overlap_RNFLT_CVRF
+
+# open and check with fsleyes 
+#
+------------------------------------------------------------------------
+##
+# sources:
+https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/
+##
+------------------------------------------------------------------------
