@@ -1,0 +1,8 @@
+#Mango Color LUT
+#Sun May 04 19:40:31 CEST 2025
+Knot2=0.95 255 255 0 1
+Name=Red Overlay
+Knot1=0.5 255 127 0 1
+Knot0=0.0 191 0 0 1
+NumberOfKnots=4
+Knot3=1.0 255 255 255 0
