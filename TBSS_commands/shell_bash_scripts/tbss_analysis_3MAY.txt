@@ -69,8 +69,8 @@ tbss_non_FA MD
 # (masking and then multiplzing the images that woould be seacrhed for a conjunction
 
 # first, masking (related significant maps)
-fslmaths tbss_RNFLT_clustere_corrp_tstat1.nii.gz -thr 0.945 -bin tbss_RNFLT_clustere_corrp_tstat1_MASK
-fslmaths tbss_CVRF_clustere_corrp_tstat2.nii.gz -thr 0.945 -bin tbss_CVRF_clustere_corrp_tstat2_MASK
+fslmaths tbss_RNFLT_clustere_corrp_tstat1.nii.gz -thr 0.95 -bin tbss_RNFLT_clustere_corrp_tstat1_MASK
+fslmaths tbss_CVRF_clustere_corrp_tstat2.nii.gz -thr 0.95 -bin tbss_CVRF_clustere_corrp_tstat2_MASK
 
 # second multiplying (related significant maps)
 fslmaths $origdir/tbss_RNFLT_clustere_corrp_tstat1_MASK.nii.gz -mul $origdir/tbss_CVRF_clustere_corrp_tstat2_MASK.nii.gz $resultsdir/overlap_RNFLT_CVRF
